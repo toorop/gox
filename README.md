@@ -22,6 +22,13 @@ apt-get install qpress
 
 ### Download gox on our backup server
 
+Get binary from [releases page](https://github.com/toorop/gox/releases)
+
+Rename binary:
+
+```
+mv gox_0.1.0_linux-amd64 gox
+```
 
 ### Create a config file corresponding to the backup/remote task
 
@@ -75,3 +82,18 @@ gox backup --config /path/to/mysql.host.com.yaml
 ```
 gox restore --config /path/to/mysql.host.com.yaml --from 2018-01-31--08-32-49
 ```
+## Support this project
+If this project is useful for you, please consider making a donation.
+
+### Bitcoin
+
+Address: 1JvMRNRxiTiN9H7LyZTq4yzR7ez86M7ND6
+
+![Bitcoin QR code](https://raw.githubusercontent.com/toorop/wallets/master/btc.png)
+
+
+### Ethereum
+
+Address: 0xA84684B45969efbD54fd25A1e2eD8C7790A0C497
+
+![ETH QR code](https://raw.githubusercontent.com/toorop/wallets/master/eth.png)
