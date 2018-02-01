@@ -2,9 +2,12 @@
 
 Painless backup (and restore) tool for MySQL based on xtrabackup from Percona.
 
-<div style="width:100%;height:0;padding-bottom:64%;position:relative;"><iframe src="https://giphy.com/embed/zcCGBRQshGdt6" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div>
+<p align="center">
+  <img src="https://media.giphy.com/media/zcCGBRQshGdt6/giphy.gif">
+</p>
 
 ## Quick start
+
 
 
 ### Install xtrabackup and qpress on MySQL server
