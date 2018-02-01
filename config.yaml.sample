@@ -1,0 +1,33 @@
+# Remote MySQL host
+host: mysql.explample.com
+# Mysql user
+dbuser: root
+# Mysql password
+dbpassword:
+# SSH config
+ssh:
+  # SSH user
+  user: root
+  # Private key for ssh user
+  key: /home/jdoe/.ssh/id_rsa
+# Remote path of xtrabsckup binary
+xtrabackup: /usr/bin/xtrabackup
+# The number of threads to use to copy multiple data files concurrently when creating a backup
+parallel: 2
+# Compression 
+compress:
+  # Compress ?
+  active: true
+  # This option specifies the number of worker threads used by xtrabackup for parallel data compression
+  threads: 2
+  # This option when specified will remove .qp, .xbcrypt and .qp.xbcrypt files after decryption and decompression.
+  remove-original: true
+# This options creates the xtrabackup_galera_info file which contains the local node state at the time of the backup.
+# After a restauration of a Galera node, Mysql will be launched with the "--wsrep_start_position" option 
+galera: false
+# Storage path for backup
+backup-dir: /tmp/
+# Remove backups older than 'keep' 
+# A duration string is a possibly signed sequence of decimal numbers, each with optional fraction and a unit suffix,
+# such as "300ms", "-1.5h" or "2h45m". Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+keep: 168h
