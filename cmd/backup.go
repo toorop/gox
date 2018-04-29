@@ -87,10 +87,10 @@ func backup(cmd *cobra.Command, args []string) {
 		log.Fatalln("ERR - 'backup-dir' not found in config")
 	}
 
-	command = fmt.Sprintf("%s --user %s", command, user)
+	command = fmt.Sprintf("%s --user=%s", command, user)
 
 	if viper.GetString("dbpassword") != "" {
-		command += " --password \"" + viper.GetString("dbpassword") + "\""
+		command += " --password=\"" + viper.GetString("dbpassword") + "\""
 	}
 
 	// Compress ?
