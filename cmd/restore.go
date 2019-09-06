@@ -56,6 +56,11 @@ func restore(cmd *cobra.Command, args []string) {
 	sshUser := viper.GetString("ssh.user")
 	sshKey := viper.GetString("ssh.key")
 
+	command := viper.GetString("xtrabackup")
+	if command == "" {
+		command = "xtrabackup"
+	}
+
 	// host
 	host := viper.GetString("host")
 	if host == "" {
@@ -77,7 +82,10 @@ func restore(cmd *cobra.Command, args []string) {
 
 	fmt.Printf("Restoring %s to %s ? (y/N): ", from, host)
 	var resp string
-	fmt.Scanf("%s", &resp)
+	if _, err := fmt.Scanf("%s", &resp); err != nil {
+		log.Fatalln("ERR - unable to scan response: ", err)
+	}
+
 	if resp != "y" {
 		os.Exit(0)
 	}
@@ -108,11 +116,11 @@ func restore(cmd *cobra.Command, args []string) {
 	ssh.RunOrDie(fmt.Sprintf("xbstream -C %s -x < %s/backup.xbstream", tempDir, tempDir))
 
 	// Decompress
-	ssh.RunOrDie(fmt.Sprintf("xtrabackup --remove-original --decompress --target-dir=\"%s/\"", tempDir))
+	ssh.RunOrDie(fmt.Sprintf("%s --remove-original --decompress --target-dir=\"%s/\"", command, tempDir))
 
 	// Prepare
 	log.Println("Preparing backup...")
-	ssh.RunOrDie(fmt.Sprintf("xtrabackup --prepare --target-dir=%s", tempDir))
+	ssh.RunOrDie(fmt.Sprintf("%s --prepare --target-dir=%s", command, tempDir))
 
 	// Shutdown MySQL
 	log.Println("Shuting down MySQL")
@@ -128,14 +136,14 @@ func restore(cmd *cobra.Command, args []string) {
 	// Restore
 	// xtrabackup --copy-back --target-dir=/data/backups/
 	log.Println("Restoring backup...")
-	ssh.RunOrDie(fmt.Sprintf("xtrabackup --copy-back --target-dir=%s", tempDir))
+	ssh.RunOrDie(fmt.Sprintf("%s --copy-back --target-dir=%s", command, tempDir))
 
 	// chown -R mysql:mysql /var/lib/mysql/
 	ssh.RunOrDie("chown -R mysql:mysql /var/lib/mysql/")
 
 	// Start Mysql
 	// if galera node
-	command := "service mysql start"
+	command = "service mysql start"
 	if viper.GetBool("galera") {
 		out, err := ssh.GetOutput(fmt.Sprintf("cat %s", path.Join(tempDir, "xtrabackup_galera_info")))
 		if err != nil {
@@ -144,9 +152,7 @@ func restore(cmd *cobra.Command, args []string) {
 		command = fmt.Sprintf("%s --wsrep_start_position=\"%s\"", command, string(out))
 	}
 	log.Println("Starting MySQL...")
-
 	ssh.RunOrDie(command)
-
 	// That's it !
 	log.Println("Backup restored !")
 }

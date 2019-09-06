@@ -64,7 +64,7 @@ func backup(cmd *cobra.Command, args []string) {
 	// command
 	command := viper.GetString("xtrabackup")
 	if command == "" {
-		command = "xtrabackup --"
+		command = "xtrabackup"
 	}
 
 	command += " --backup --stream=xbstream"
